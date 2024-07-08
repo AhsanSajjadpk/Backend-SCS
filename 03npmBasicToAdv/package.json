@@ -1,0 +1,16 @@
+{
+  "dependencies": {
+    "one-liner-joke": "^1.2.2"
+  },
+  "name": "03npmbasictoadv",
+  "version": "1.0.0",
+  "main": "script.js",
+  "devDependencies": {},
+  "scripts": {
+    "start": "node script.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
