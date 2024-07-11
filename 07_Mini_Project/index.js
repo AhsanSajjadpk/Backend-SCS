@@ -5,7 +5,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const fs = require('fs')
+const fs = require('fs');
+const { log } = require('console');
 
 app.set('view engine', 'ejs');
 app.use(express.json());
@@ -21,6 +22,25 @@ app.get('/', function (req, res) {
         }
     })
     
+})
+
+app.get('/file/:filename', function (req, res) {
+
+    fs.readFile(`./files/${req.params.filename}`,'utf-8',function(err,filedata){
+        res.render('data',{filename : req.params.filename.split('.')  ,data: filedata });
+    })
+
+})
+
+app.get('/delete/:filename', function (req, res) {
+
+    fs.rm(`./files/${req.params.filename}`,function(err){
+        if(err) throw err
+        else{
+            res.redirect('/')
+        }
+    })
+
 })
 
 app.post('/create', function (req, res) {
