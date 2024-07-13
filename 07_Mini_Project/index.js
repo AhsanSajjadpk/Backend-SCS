@@ -18,36 +18,56 @@ app.get('/', function (req, res) {
     fs.readdir('./files', function (err, files) {
         if (err) throw err
         else {
-            res.render('index',{ files: files });
+            res.render('index', { files: files });
         }
     })
-    
+
 })
 
 app.get('/file/:filename', function (req, res) {
 
-    fs.readFile(`./files/${req.params.filename}`,'utf-8',function(err,filedata){
-        res.render('data',{filename : req.params.filename.split('.')  ,data: filedata });
+    fs.readFile(`./files/${req.params.filename}`, 'utf-8', function (err, filedata) {
+        res.render('data', { filename: req.params.filename.split('.'), data: filedata });
     })
 
 })
 
 app.get('/delete/:filename', function (req, res) {
 
-    fs.rm(`./files/${req.params.filename}`,function(err){
-        if(err) throw err
-        else{
+    fs.rm(`./files/${req.params.filename}`, function (err) {
+        if (err) throw err
+        else {
             res.redirect('/')
         }
     })
 
 })
 
-app.post('/create', function (req, res) {
+app.get('/edit/:filename', function (req, res) {
+
+    res.render('edit', { filename: req.params.filename })
+
   
-fs.writeFile(`./files/${req.body.title.split(' ').join('')}.txt`,req.body.details,function(err){
-res.redirect('/');
+
 })
+
+app.post('/edit', function (req, res) {
+
+    fs.rename(`./files/${req.body.previous}`,`./files/${req.body.new}` , function (err) {
+
+        res.redirect('/')
+    })
+    
+
+})
+
+
+
+app.post('/create', function (req, res) {
+
+    fs.writeFile(`./files/${req.body.title.split(' ').join('')}.txt`, req.body.details, function (err) {
+        res.redirect('/');
+    })
 
 })
 
