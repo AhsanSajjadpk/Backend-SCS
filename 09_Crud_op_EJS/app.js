@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path')
+const userModal = require('./models/user')
 
 app.set('view engine','ejs')
 app.use(express.json());
@@ -12,8 +13,23 @@ app.get('/',(req,res)=>{
     res.render('home');
 })
 
-app.get('/read',(req,res)=>{
-    res.render('read');
+app.get('/read',async (req,res)=>{
+
+    let everyUsers = await userModal.find();
+    res.render('read' , {users : everyUsers} );
+})
+
+app.post('/create',async (req,res)=>{
+
+    let {name, email, image } =req.body;
+   const createdUser = await userModal.create({
+
+        name : name,
+        email : email,
+        image : image
+    })
+   res.send(createdUser)
+
 })
 
 
