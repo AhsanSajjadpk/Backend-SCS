@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div class="w-full h-full bg-zinc-800 p-5 flex justify-center">
+
+        <div class="w-80 h-3/4 bg-zinc-700 p-5 rounded-lg">
+            <h1 class="text-3xl mb-5 tracking-tighter">Update User</h1>
+
+            <form action="/update/<%= user._id %>" method="post">
+                <input class="focus w-full outline-none bg-transparent px-5 py-2 border-zinc-600 border-2 rounded-lg mx-1"
+                    type="text" name="uname" value="<%= user.name %>"><br><br>
+                <input class=" w-full outline-none bg-transparent px-5 py-2 border-zinc-600 border-2 rounded-lg mx-1"
+                    type="text" name="uemail" value="<%= user.email %>"><br><br>
+                <input class=" w-full outline-none bg-transparent px-5 py-2 border-zinc-600 border-2 rounded-lg mx-1"
+                    type="text" name="uimage" value="<%= user.image %>"><br><br>
+
+                <div class="w-full mt-3 flex justify-between">
+                    <input class=" outline-none bg-yellow-600 px-4 py-2 text-xl  rounded-lg mx-1" type="submit"
+                        value="Update">
+                    <a href="/read">
+                        <button class="bg-blue-600 rounded-lg p-3 text-2xl">Back</button>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
