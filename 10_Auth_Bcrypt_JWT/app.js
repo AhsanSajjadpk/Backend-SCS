@@ -4,6 +4,7 @@
 const bcrypt = require('bcrypt'); // use for encryption and decryption -> npmjs.com
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const app = express()
 
 app.use(cookieParser())
@@ -42,6 +43,38 @@ app.get('/decrypt', (req, res) => {
 
     });
 })
+
+app.get('/jwt', (req, res) => {
+    const token = jwt.sign({email : "sajjadahsan461@gmail.com"},"SecretStringAyaGiYahan")
+    res.cookie("token" , token)
+    console.log(token)
+    res.send("Getting JWT String on console")
+
+
+})
+// app.get('/jwtget', (req, res) => {
+   
+//     let data = jwt.verify(req.cookies.token, "SecretStringAyaGiYahan")
+//     console.log(data)
+//     res.send("Getting JWT String on console getting")
+
+
+// })
+
+app.get('/jwtget', (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(403).send("Token not provided");
+    }
+
+    try {
+        const data = jwt.verify(token, "SecretStringAyaGiYahan");
+        console.log(data);
+        res.send("Token verified and data logged.");
+    } catch (err) {
+        res.status(401).send("Invalid token");
+    }
+});
 
 
 app.listen(3000)
