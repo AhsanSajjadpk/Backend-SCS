@@ -20,7 +20,7 @@ var arr = [1,2,3,4,"Ahsan"]
 
 
 var res = arr.find(function(val){
-    if (val == 4) return true;
+    if (val == 3) return true;
     else return false;
 })
 console.log(res);
