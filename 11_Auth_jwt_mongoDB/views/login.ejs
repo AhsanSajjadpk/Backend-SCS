@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 
     <div class="w-full h-screen bg-zinc-900 text-white flex justify-center align-center ">
 
-        <div class="w-1/4 h-3/4 bg-transparent px-3 py-3 mt-10 border-2 bg-transparent border-zinc-800 outline-none rounded-lg" >
-            <h1 class=" text-3xl mb-5">Create User</h1>
-            <form method="post" action="/create">
+        <div class="w-1/4 h-72 bg-transparent px-3 py-3 mt-10 border-2 bg-transparent border-zinc-800 outline-none rounded-lg" >
+            <h1 class=" text-3xl mb-5">Login User</h1>
+            <form method="post" action="/login">
 
-                <input class="px-3 py-2 mt-3 rounded-md w-full border-2 bg-transparent border-zinc-800 outline-none" type="text" placeholder="username" name="username"><br>
+                
                 <input class="px-3 py-2 mt-3 rounded-md w-full border-2 bg-transparent border-zinc-800 outline-none" type="text" placeholder="email" name="email"><br>
                 <input class="px-3 py-2 mt-3 rounded-md w-full border-2 bg-transparent border-zinc-800 outline-none" type="password" placeholder="password" name="password"><br>
-                <input class="px-3 py-2 mt-3 rounded-md w-full border-2 bg-transparent border-zinc-800 outline-none" type="number" placeholder="age" name="age"><br>
-                <input class="bg-blue-600 mt-3  py-2 w-full rounded-md" type="submit" value="Create User">
+                
+                <input class="bg-blue-600 mt-3  py-2 w-full rounded-md" type="submit" value="Login">
     
     
             </form>

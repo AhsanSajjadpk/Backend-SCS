@@ -18,28 +18,62 @@ app.get('/', function (req, res) {
 })
 
 
-app.post('/create',  function (req, res) {
+app.post('/create', function (req, res) {
     let { username, email, password, age } = req.body
 
-    bcrypt.genSalt(saltRounds=10, function(err, salt) {
-        bcrypt.hash(password, salt, async function(err, hash) {
-            
+    bcrypt.genSalt(saltRounds = 10, function (err, salt) {
+        bcrypt.hash(password, salt, async function (err, hash) {
+
             const createdUser = await userModel.create({
                 username,
                 email,
-                password : hash,
+                password: hash,
                 age
             })
-        
-          let token =  jwt.sign({email}, "secretkey")
-          res.cookie("token",token)
+
+            let token = jwt.sign({ email }, "secretkey")
+            res.cookie("token", token)
             res.send(createdUser)
 
         });
-        
+
     });
 
-  
+
 })
+
+app.get('/logout', function (req, res) {
+    res.cookie("token", "")
+    res.redirect('/')
+})
+app.get('/login', function (req, res) {
+    res.render('login')
+    // res.redirect('/')
+})
+
+app.post('/login', async function (req, res) {
+
+let user = await userModel.findOne({ email : req.body.email })
+
+if(!user){
+res.send("something is wrong")
+}
+else{
+
+    bcrypt.compare(req.body.password , user.password , function(err , result){
+        if(result){
+            let token = jwt.sign({email : user.email}, "privatekey")
+            res.cookie("token", token)
+            res.send(" you can Login")
+        }
+        else{
+            res.send(" Wrong username or password")
+
+        }
+    })
+}
+
+})
+
 
 app.listen(3000)
