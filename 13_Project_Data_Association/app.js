@@ -5,6 +5,7 @@ const postModel = require('./models/post');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const user = require('./models/user');
 
 
 
@@ -22,10 +23,104 @@ app.get('/login', (req, res) => {
     res.render('login')
 })
 
-app.get('/profile', isLoggedIn, (req, res) => {
-    console.log(req.user)
-    res.render('profile')
+app.get('/profile', isLoggedIn, async (req, res) => {
+    // console.log(req.user)
+
+    let user = await userModel.findOne({ email: req.user.email }).populate("posts")
+
+    // console.log(loginUser)
+    res.render('profile', { data: user })
+
+
 })
+
+
+
+
+
+app.get('/like/:id', isLoggedIn, async (req, res) => {
+
+
+    let post = await postModel.findOne({ _id: req.params.id }).populate("user")
+    
+    if(post.likes.indexOf(req.user.userid) === -1){
+        
+        post.likes.push(req.user.userid)
+    }
+    else{
+
+        post.likes.splice(post.likes.indexOf(req.user.userid),1)
+
+    }
+    await post.save()
+    res.redirect('/profile')
+})
+
+
+
+app.get('/edit/:id', isLoggedIn, async (req, res) => {
+
+
+    let post = await postModel.findOne({ _id: req.params.id }).populate('user')
+    
+   res.render('edit' , {post})
+})
+
+
+app.post('/update/:id', async (req, res) => {
+
+
+    let {content} = req.body
+    let updatedPost = await postModel.findOneAndUpdate({ _id: req.params.id }, {content : content}).populate('user')
+    
+   res.redirect('/profile')
+})
+
+
+
+app.get('/delete/:id', isLoggedIn, async (req, res) => {
+
+
+    let deleted = await postModel.findOneAndDelete({ _id: req.params.id }).populate('user')
+    
+    res.redirect('/profile')
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+app.post('/post', isLoggedIn, async (req, res) => {
+
+    let user = await userModel.findOne({ email: req.user.email })
+
+    let { content } = req.body;
+
+    let post = await postModel.create({
+
+        user: user._id,
+        content
+
+    })
+
+    user.posts.push(post._id)
+    await user.save()
+
+    res.redirect('/profile')
+
+
+})
+
+
 app.get('/logout', (req, res) => {
     res.cookie("token", "")
     res.redirect("/")
@@ -63,7 +158,8 @@ app.post('/login', async (req, res) => {
         if (result) {
             let token = jwt.sign({ email: email, userid: user._id }, "secretekry")
             res.cookie("token", token)
-            res.send("you can login")
+            // res.send("you can login")
+            res.redirect('/profile')
         }
         else {
             res.redirect("/login")
@@ -77,7 +173,7 @@ function isLoggedIn(req, res, next) {
 
     if (req.cookies.token === "") {
         console.log(req.cookies)
-        res.send("You must be logged in")
+        res.redirect("/login")
     }
     else {
         let data = jwt.verify(req.cookies.token, "secretekry") // data ma email aur userid ayaga jo ham na jwt ma signn kea tha
@@ -86,16 +182,6 @@ function isLoggedIn(req, res, next) {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
