@@ -1,12 +1,16 @@
 const mongoose = require('mongoose')
+const config = require('config')
+const dbgr = require('debug')("development:mongoose")
+// set DEBUG=development*  --- when see log values
+// set DEBUG=               --- when hide log values
 
-mongoose.connect("mongodb://127.0.0.1:27017/BagShopDB")
+mongoose.connect(`${config.get("MONGODB_URI")}/BagShopDB`)
     .then(() => {
-        console.log("\nConnected to MongoDB.....\n")
+        dbgr("\nConnected to MongoDB.....\n")
     })
     .catch((err) => {
 
-        console.log("ERROR : ", err.message)
+        dbgr("ERROR : ", err.message)
 
     })
 
